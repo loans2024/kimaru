@@ -9,6 +9,8 @@ export default function LawyerEcard() {
   const [lawyerData, setLawyerData] = useState(null);
 
   useEffect(() => {
+    if (!lawyerId) return; // Early return if lawyerId is not yet available
+
     // Fetch the lawyer data dynamically using the lawyerId
     const fetchLawyerData = async () => {
       const response = await fetch(`/api/lawyers/${lawyerId}`);
@@ -27,6 +29,7 @@ export default function LawyerEcard() {
   // Dynamic link per lawyer
   const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerId}`;
 
+  // Render if the lawyerId is available and data is fetched
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
       <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl p-8 space-y-6">
@@ -112,11 +115,14 @@ export default function LawyerEcard() {
         </div>
 
         {/* Dynamic QR Code */}
-        <div className="flex justify-center mt-6">
-          {/* Render dynamic QR Code */}
-          <QRCode value={lawyerLink} size={128} />
-        </div>
+        {lawyerId && (
+          <div className="flex justify-center mt-6">
+            {/* Render dynamic QR Code */}
+            <QRCode value={lawyerLink} size={128} />
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
