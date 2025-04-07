@@ -6,28 +6,6 @@ import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
 import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
-// Hardcoded lawyer database
-const lawyerDatabase = {
-  kimaru: {
-    name: 'Kevin Kimaru',
-    title: 'Kimaru Kimutai & Co. Advocates',
-    profileImage: '/images/kimaru.jpeg',
-    firmLogoUrl: '/firm-logo.png',
-    tagline: 'Dedication. Passion. Abilities. Knowledge.',
-    practiceAreas: ['Conveyancing', 'Litigation'],
-    phone: '+254729128937',
-    email: 'kimarulaw@gmail.com',
-    website: 'https://kimaru.netlify.app',
-    officeAddress: 'Lumumba Drive next to Cider Dental Clinic Eldoret, Kenya',
-    mapLink: 'https://maps.google.com?q=Lumumba+Drive+Eldoret+Kenya',
-    socialLinks: {
-      linkedin: 'https://linkedin.com/in/kevinkimaru',
-      twitter: 'https://twitter.com/kevinkimaru',
-    },
-  },
-  // You can add more profiles here
-};
-
 export default function LawyerEcard() {
   const { lawyerid } = useParams();
   const [lawyerData, setLawyerData] = useState(null);
@@ -35,13 +13,18 @@ export default function LawyerEcard() {
   useEffect(() => {
     if (!lawyerid) return;
 
-    // Simulate fetching from an API by looking up the hardcoded database
-    const data = lawyerDatabase[lawyerid];
-    if (data) {
-      setLawyerData(data);
-    } else {
-      console.error('Lawyer not found:', lawyerid);
-    }
+    const fetchLawyerData = async () => {
+      try {
+        const res = await fetch(`/api/lawyers/${lawyerid}`);
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        setLawyerData(data);
+      } catch (err) {
+        console.error('Failed to fetch lawyer data:', err);
+      }
+    };
+
+    fetchLawyerData();
   }, [lawyerid]);
 
   if (!lawyerData) {
@@ -83,7 +66,7 @@ export default function LawyerEcard() {
 
         {/* Tagline */}
         {lawyerData.tagline && (
-          <p className="italic text-center text-gray-700">&quot;{lawyerData.tagline}&quot;</p>
+          <p className="italic text-center text-gray-700">"{lawyerData.tagline}"</p>
         )}
 
         {/* Practice Areas */}
