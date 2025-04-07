@@ -73,7 +73,7 @@ export default function LawyerEcard() {
         </div>
 
         {/* Tagline */}
-        <p className="mt-6 italic text-gray-500 font-playfair">"Dedication. Passion. Abilities. Knowledge."</p>
+        <p className="mt-6 italic text-gray-500 font-playfair">&quot;Dedication. Passion. Abilities. Knowledge.&quot;</p>
 
         {/* Dynamic QR Code */}
         <div className="mt-4 flex justify-center">
@@ -84,3 +84,4 @@ export default function LawyerEcard() {
     </div>
   );
 }
+
