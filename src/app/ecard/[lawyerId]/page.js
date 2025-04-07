@@ -1,12 +1,14 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
+import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
-export default function LawyerEcard() {
-  // Hardcode the lawyer data
-  const lawyerData = {
+// Hardcoded lawyer database
+const lawyerDatabase = {
+  kimaru: {
     name: 'Kevin Kimaru',
     title: 'Kimaru Kimutai & Co. Advocates',
     profileImage: '/images/kimaru.jpeg',
@@ -22,10 +24,35 @@ export default function LawyerEcard() {
       linkedin: 'https://linkedin.com/in/kevinkimaru',
       twitter: 'https://twitter.com/kevinkimaru',
     },
-  };
+  },
+  // You can add more profiles here
+};
 
-  // Hardcode the lawyerLink or compute from a dynamic param if needed
-  const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
+export default function LawyerEcard() {
+  const { lawyerid } = useParams();
+  const [lawyerData, setLawyerData] = useState(null);
+
+  useEffect(() => {
+    if (!lawyerid) return;
+
+    // Simulate fetching from an API by looking up the hardcoded database
+    const data = lawyerDatabase[lawyerid];
+    if (data) {
+      setLawyerData(data);
+    } else {
+      console.error('Lawyer not found:', lawyerid);
+    }
+  }, [lawyerid]);
+
+  if (!lawyerData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-600">Loading lawyer profile…</p>
+      </div>
+    );
+  }
+
+  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
@@ -33,7 +60,7 @@ export default function LawyerEcard() {
         {/* Firm Logo */}
         <div className="flex justify-center">
           <Image
-            src={lawyerData.firmLogoUrl}
+            src={lawyerData.firmLogoUrl || '/firm-logo.png'}
             alt="Firm Logo"
             width={120}
             height={120}
