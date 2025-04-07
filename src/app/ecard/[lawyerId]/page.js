@@ -92,7 +92,7 @@ export default function LawyerEcard() {
 
         {/* Tagline */}
         {lawyerData.tagline && (
-          <p className="italic text-center text-gray-700">"{lawyerData.tagline}"</p>
+          <p className="italic text-center text-gray-700">&quot;{lawyerData.tagline}&quot;</p>
         )}
 
         {/* Practice Areas */}
