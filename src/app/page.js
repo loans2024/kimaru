@@ -14,30 +14,30 @@ export default function LawyerEcard() {
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
           <Image
-            src="/images/lawyer-profile.jpg"
-            alt="Jane Smith"
-            width={120}
-            height={120}
+            src="/images/kimaru.jpeg"
+            alt=""
+            width={140}
+            height={130}
             className="rounded-full border-4 border-gray-200"
           />
         </div>
 
         {/* Name & Title */}
-        <h1 className="text-2xl font-bold text-gray-900">Jane Smith</h1>
-        <p className="text-sm text-gray-500">Senior Attorney, Justice & Co. Law Firm</p>
+        <h1 className="text-3xl font-bold text-gray-900 font-playfair">Kevin Kimaru</h1>
+        <p className="text-sm text-gray-500">Kimaru Kimutai & Co. Advocates</p>
 
         {/* Practice Areas */}
         <div className="mt-4">
-          <p className="text-gray-700">⚖️ Criminal Law, Immigration Law, Family Law</p>
+          <p className="text-gray-700">⚖️ Expert in Conveyancing and Litigation</p>
         </div>
 
         {/* Contact Info */}
         <div className="mt-6 space-y-2">
           <p className="flex items-center justify-center gap-2 text-gray-700">
-            <FaPhone /> +1 (555) 123-4567
+            <FaPhone /> +254 (729) 128-937
           </p>
           <p className="flex items-center justify-center gap-2 text-gray-700">
-            <FaEnvelope /> jane@justiceco.com
+            <FaEnvelope /> kimarulaw@gmail.com
           </p>
           <p className="flex items-center justify-center gap-2 text-gray-700">
             <FaMapMarkerAlt />
@@ -47,7 +47,7 @@ export default function LawyerEcard() {
               rel="noopener noreferrer"
               className="hover:underline"
             >
-              123 Legal St, Lawville
+              Lumumba Drive next to Cider Dental Clinic Eldoret Kenya
             </a>
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function LawyerEcard() {
         </div>
 
         {/* Tagline */}
-        <p className="mt-6 italic text-gray-500">"Justice is our mission."</p>
+        <p className="mt-6 italic text-gray-500 font-playfair">"Dedication. Passion. Abilities. Knowledge."</p>
 
         {/* Dynamic QR Code */}
         <div className="mt-4 flex justify-center">
