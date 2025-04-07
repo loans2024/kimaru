@@ -1,41 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import QRCode from 'react-qr-code';
 
 export default function LawyerEcard() {
-  const { lawyerid } = useParams();
-  const [lawyerData, setLawyerData] = useState(null);
+  // Hardcode the lawyer data
+  const lawyerData = {
+    name: 'Kevin Kimaru',
+    title: 'Kimaru Kimutai & Co. Advocates',
+    profileImage: '/images/kimaru.jpeg',
+    firmLogoUrl: '/firm-logo.png',
+    tagline: 'Dedication. Passion. Abilities. Knowledge.',
+    practiceAreas: ['Conveyancing', 'Litigation'],
+    phone: '+254729128937',
+    email: 'kimarulaw@gmail.com',
+    website: 'https://kimaru.netlify.app',
+    officeAddress: 'Lumumba Drive next to Cider Dental Clinic Eldoret, Kenya',
+    mapLink: 'https://maps.google.com?q=Lumumba+Drive+Eldoret+Kenya',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/kevinkimaru',
+      twitter: 'https://twitter.com/kevinkimaru',
+    },
+  };
 
-  useEffect(() => {
-    if (!lawyerid) return;
-
-    const fetchLawyerData = async () => {
-      try {
-        const res = await fetch(`/api/lawyers/${lawyerid}`);
-        if (!res.ok) throw new Error('Network response was not ok');
-        const data = await res.json();
-        setLawyerData(data);
-      } catch (err) {
-        console.error('Failed to fetch lawyer data:', err);
-      }
-    };
-
-    fetchLawyerData();
-  }, [lawyerid]);
-
-  if (!lawyerData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-600">Loading lawyer profile…</p>
-      </div>
-    );
-  }
-
-  // Build the exact URL you want embedded in the QR code:
-  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
+  // Hardcode the lawyerLink or compute from a dynamic param if needed
+  const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
@@ -43,7 +33,7 @@ export default function LawyerEcard() {
         {/* Firm Logo */}
         <div className="flex justify-center">
           <Image
-            src={lawyerData.firmLogoUrl || '/firm-logo.png'}
+            src={lawyerData.firmLogoUrl}
             alt="Firm Logo"
             width={120}
             height={120}
