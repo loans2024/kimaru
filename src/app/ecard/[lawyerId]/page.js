@@ -6,6 +6,28 @@ import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
 import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
+// Hardcoded lawyer database
+const lawyerDatabase = {
+  kimaru: {
+    name: 'Kevin Kimaru',
+    title: 'Kimaru Kimutai & Co. Advocates',
+    profileImage: '/images/kimaru.jpeg',
+    firmLogoUrl: '/firm-logo.png',
+    tagline: 'Dedication. Passion. Abilities. Knowledge.',
+    practiceAreas: ['Conveyancing', 'Litigation'],
+    phone: '+254729128937',
+    email: 'kimarulaw@gmail.com',
+    website: 'https://kimaru.netlify.app',
+    officeAddress: 'Lumumba Drive next to Cider Dental Clinic Eldoret, Kenya',
+    mapLink: 'https://maps.google.com?q=Lumumba+Drive+Eldoret+Kenya',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/kevinkimaru',
+      twitter: 'https://twitter.com/kevinkimaru',
+    },
+  },
+  // Add more hardcoded profiles as needed
+};
+
 export default function LawyerEcard() {
   const { lawyerid } = useParams();
   const [lawyerData, setLawyerData] = useState(null);
@@ -20,7 +42,11 @@ export default function LawyerEcard() {
         const data = await res.json();
         setLawyerData(data);
       } catch (err) {
-        console.error('Failed to fetch lawyer data:', err);
+        console.warn('Using fallback data due to fetch failure:', err);
+        const fallback = lawyerDatabase[lawyerid];
+        if (fallback) {
+          setLawyerData(fallback);
+        }
       }
     };
 
