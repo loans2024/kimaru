@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
@@ -11,11 +12,18 @@ export default function LawyerEcard() {
   useEffect(() => {
     if (!lawyerId) return; // Early return if lawyerId is not yet available
 
+    console.log("Fetching data for lawyerId:", lawyerId);  // Debugging
+
     // Fetch the lawyer data dynamically using the lawyerId
     const fetchLawyerData = async () => {
-      const response = await fetch(`/api/lawyers/${lawyerId}`);
-      const data = await response.json();
-      setLawyerData(data);
+      try {
+        const response = await fetch(`/api/lawyers/${lawyerId}`);
+        const data = await response.json();
+        console.log("Fetched lawyer data:", data);  // Debugging
+        setLawyerData(data);
+      } catch (error) {
+        console.error("Error fetching lawyer data:", error);
+      }
     };
 
     fetchLawyerData();
@@ -125,4 +133,3 @@ export default function LawyerEcard() {
     </div>
   );
 }
-
