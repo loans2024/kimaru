@@ -2,10 +2,10 @@
 
 import Image from 'next/image';
 import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import QRCode from 'react-qr-code';
+import QRCode from 'react-qr-code'; // Import the QRCode component
 
 export default function LawyerEcard() {
-  // Hardcode the lawyer data
+  // Hardcoded lawyer data for now
   const lawyerData = {
     name: 'Kevin Kimaru',
     title: 'Kimaru Kimutai & Co. Advocates',
@@ -24,129 +24,88 @@ export default function LawyerEcard() {
     },
   };
 
-  // Hardcode the lawyerLink or compute from a dynamic param if needed
+  // Hardcoded dynamic lawyerLink
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
-      <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl p-8 space-y-6">
-        {/* Firm Logo */}
-        <div className="flex justify-center">
-          <Image
-            src={lawyerData.firmLogoUrl}
-            alt="Firm Logo"
-            width={120}
-            height={120}
-            className="rounded-full"
-          />
-        </div>
-
-        {/* Profile Photo + Name/Title */}
-        <div className="text-center space-y-2">
+    <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
+        {/* Profile Photo */}
+        <div className="flex justify-center mb-4">
           <Image
             src={lawyerData.profileImage}
             alt={lawyerData.name}
-            width={120}
-            height={120}
-            className="rounded-full mx-auto"
+            width={140}
+            height={130}
+            className="rounded-full border-4 border-gray-200"
           />
-          <h1 className="text-2xl font-bold">{lawyerData.name}</h1>
-          <p className="text-sm text-gray-600">{lawyerData.title}</p>
         </div>
 
-        {/* Tagline */}
-        {lawyerData.tagline && (
-          <p className="italic text-center text-gray-700">&quot;{lawyerData.tagline}&quot;</p>
-        )}
+        {/* Name & Title */}
+        <h1 className="text-3xl font-bold text-gray-900 font-playfair">{lawyerData.name}</h1>
+        <p className="text-sm text-gray-500">{lawyerData.title}</p>
 
         {/* Practice Areas */}
-        {lawyerData.practiceAreas?.length > 0 && (
-          <div>
-            <h2 className="font-semibold mb-1">Practice Areas</h2>
-            <ul className="list-disc list-inside text-sm text-gray-700">
-              {lawyerData.practiceAreas.map((area, i) => (
-                <li key={i}>{area}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Contact Info */}
-        <div className="space-y-1 text-sm">
-          <p><strong>Phone:</strong> {lawyerData.phone}</p>
-          <p><strong>Email:</strong> {lawyerData.email}</p>
-          {lawyerData.website && (
-            <p>
-              <strong>Website:</strong>{' '}
-              <a
-                href={lawyerData.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
-              >
-                {lawyerData.website}
-              </a>
+        <div className="mt-4">
+          {lawyerData.practiceAreas?.length > 0 && (
+            <p className="text-gray-700">
+              ⚖️ Expert in{' '}
+              {lawyerData.practiceAreas.join(' and ')}
             </p>
           )}
         </div>
 
-        {/* Office Address */}
-        {lawyerData.officeAddress && (
-          <div className="text-sm">
-            <p><strong>Office:</strong> {lawyerData.officeAddress}</p>
-            {lawyerData.mapLink && (
-              <a
-                href={lawyerData.mapLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                View on Google Maps
-              </a>
-            )}
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3 justify-center">
-          <a
-            href={`tel:${lawyerData.phone}`}
-            className="px-4 py-2 bg-blue-600 text-white rounded-full"
-          >
-            Schedule Consultation
-          </a>
-          <a
-            href={`mailto:${lawyerData.email}`}
-            className="px-4 py-2 border rounded-full"
-          >
-            Download vCard
-          </a>
+        {/* Contact Info */}
+        <div className="mt-6 space-y-2">
+          <p className="flex items-center justify-center gap-2 text-gray-700">
+            <FaPhone /> {lawyerData.phone}
+          </p>
+          <p className="flex items-center justify-center gap-2 text-gray-700">
+            <FaEnvelope /> {lawyerData.email}
+          </p>
+          <p className="flex items-center justify-center gap-2 text-gray-700">
+            <FaMapMarkerAlt />
+            <a
+              href={lawyerData.mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              {lawyerData.officeAddress}
+            </a>
+          </p>
         </div>
 
         {/* Social Links */}
         <div className="flex justify-center gap-4 mt-4">
           {lawyerData.socialLinks?.linkedin && (
-            <a href={lawyerData.socialLinks.linkedin} target="_blank">
+            <a href={lawyerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="text-blue-700 text-xl" />
             </a>
           )}
           {lawyerData.socialLinks?.twitter && (
-            <a href={lawyerData.socialLinks.twitter} target="_blank">
+            <a href={lawyerData.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
               <FaTwitter className="text-blue-400 text-xl" />
             </a>
           )}
         </div>
 
+        {/* Action Buttons */}
+        <div className="mt-6 flex flex-col md:flex-row justify-center gap-4">
+          <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition w-full md:w-auto">
+            📅 Schedule Consultation
+          </button>
+          <button className="border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 transition w-full md:w-auto">
+            📄 Download vCard
+          </button>
+        </div>
+
+        {/* Tagline */}
+        <p className="mt-6 italic text-gray-500 font-playfair">&quot;{lawyerData.tagline}&quot;</p>
+
         {/* Dynamic QR Code */}
-        <div className="flex justify-center mt-6">
-          <div style={{ background: 'white', padding: '16px' }}>
-            <QRCode
-              value={lawyerLink}
-              size={150}
-              level="M"
-              includeMargin
-            />
-          </div>
+        <div className="mt-4 flex justify-center">
+          <QRCode value={lawyerLink} size={100} />
         </div>
       </div>
     </div>
