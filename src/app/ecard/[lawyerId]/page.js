@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import QRCode from 'react-qr-code';
-import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
-// Hardcoded lawyer database
-const lawyerDatabase = {
-  kimaru: {
+export default function LawyerEcard() {
+  // Hardcode the lawyer data
+  const lawyerData = {
     name: 'Kevin Kimaru',
     title: 'Kimaru Kimutai & Co. Advocates',
     profileImage: '/images/kimaru.jpeg',
@@ -24,52 +22,18 @@ const lawyerDatabase = {
       linkedin: 'https://linkedin.com/in/kevinkimaru',
       twitter: 'https://twitter.com/kevinkimaru',
     },
-  },
-  // Add more hardcoded profiles as needed
-};
+  };
 
-export default function LawyerEcard() {
-  const { lawyerid } = useParams();
-  const [lawyerData, setLawyerData] = useState(null);
-
-  useEffect(() => {
-    if (!lawyerid) return;
-
-    const fetchLawyerData = async () => {
-      try {
-        const res = await fetch(`/api/lawyers/${lawyerid}`);
-        if (!res.ok) throw new Error('Network response was not ok');
-        const data = await res.json();
-        setLawyerData(data);
-      } catch (err) {
-        console.warn('Using fallback data due to fetch failure:', err);
-        const fallback = lawyerDatabase[lawyerid];
-        if (fallback) {
-          setLawyerData(fallback);
-        }
-      }
-    };
-
-    fetchLawyerData();
-  }, [lawyerid]);
-
-  if (!lawyerData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-gray-600">Loading lawyer profile…</p>
-      </div>
-    );
-  }
-
-  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
+  // Hardcode the lawyerLink or compute from a dynamic param if needed
+  const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
-      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-8 space-y-6">
+      <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl p-8 space-y-6">
         {/* Firm Logo */}
         <div className="flex justify-center">
           <Image
-            src={lawyerData.firmLogoUrl || '/firm-logo.png'}
+            src={lawyerData.firmLogoUrl}
             alt="Firm Logo"
             width={120}
             height={120}
@@ -86,7 +50,7 @@ export default function LawyerEcard() {
             height={120}
             className="rounded-full mx-auto"
           />
-          <h1 className="text-2xl font-bold text-gray-900">{lawyerData.name}</h1>
+          <h1 className="text-2xl font-bold">{lawyerData.name}</h1>
           <p className="text-sm text-gray-600">{lawyerData.title}</p>
         </div>
 
@@ -108,7 +72,7 @@ export default function LawyerEcard() {
         )}
 
         {/* Contact Info */}
-        <div className="space-y-1 text-sm text-gray-700">
+        <div className="space-y-1 text-sm">
           <p><strong>Phone:</strong> {lawyerData.phone}</p>
           <p><strong>Email:</strong> {lawyerData.email}</p>
           {lawyerData.website && (
