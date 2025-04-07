@@ -13,13 +13,15 @@ export default function LawyerEcard() {
       <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
+        <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
           <Image
             src="/images/kimaru.jpeg"
             alt=""
             width={140}
             height={130}
-            className="rounded-full border-4 border-gray-200"
+            className="object-cover w-full h-full"
           />
+          </div>
         </div>
 
         {/* Name & Title */}
