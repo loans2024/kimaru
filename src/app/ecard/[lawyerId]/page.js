@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
-import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 // Hardcoded lawyer database
 const lawyerDatabase = {
@@ -65,7 +65,7 @@ export default function LawyerEcard() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
-      <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl p-8 space-y-6">
+      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-8 space-y-6">
         {/* Firm Logo */}
         <div className="flex justify-center">
           <Image
@@ -86,7 +86,7 @@ export default function LawyerEcard() {
             height={120}
             className="rounded-full mx-auto"
           />
-          <h1 className="text-2xl font-bold">{lawyerData.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{lawyerData.name}</h1>
           <p className="text-sm text-gray-600">{lawyerData.title}</p>
         </div>
 
@@ -108,7 +108,7 @@ export default function LawyerEcard() {
         )}
 
         {/* Contact Info */}
-        <div className="space-y-1 text-sm">
+        <div className="space-y-1 text-sm text-gray-700">
           <p><strong>Phone:</strong> {lawyerData.phone}</p>
           <p><strong>Email:</strong> {lawyerData.email}</p>
           {lawyerData.website && (
@@ -188,3 +188,4 @@ export default function LawyerEcard() {
     </div>
   );
 }
+
