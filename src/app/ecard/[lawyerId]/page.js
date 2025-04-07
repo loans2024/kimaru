@@ -35,7 +35,7 @@ export default function LawyerEcard() {
   return (
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">
       <div className="relative w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
-        {/* Close Button */}
+        {/* Close Button 
         <button
           onClick={() => setShowCard(false)}
           className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
@@ -43,6 +43,7 @@ export default function LawyerEcard() {
         >
           <IoClose className="text-2xl" />
         </button>
+        */}
 
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
@@ -128,4 +129,5 @@ export default function LawyerEcard() {
     </div>
   );
 }
+
 

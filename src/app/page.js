@@ -15,7 +15,7 @@ export default function LawyerEcard() {
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4 relative">
       <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center relative">
 
-        {/* Close Button */}
+        {/* Close Button 
         <button
           aria-label="Close eCard"
           onClick={() => router.back()} // Go back to previous page
@@ -23,6 +23,7 @@ export default function LawyerEcard() {
         >
           <SiX className="text-2xl" />
         </button>
+        */}
 
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
