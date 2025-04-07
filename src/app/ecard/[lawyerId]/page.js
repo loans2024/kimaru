@@ -48,7 +48,7 @@ export default function LawyerEcard() {
         {/* Practice Areas */}
         <div className="mt-4">
           {lawyerData.practiceAreas?.length > 0 && (
-            <p className="text-gray-700">
+            <p className="text-black">
               ⚖️ Expert in{' '}
               {lawyerData.practiceAreas.join(' and ')}
             </p>

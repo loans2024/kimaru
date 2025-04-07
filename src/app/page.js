@@ -28,7 +28,7 @@ export default function LawyerEcard() {
 
         {/* Practice Areas */}
         <div className="mt-4">
-          <p className="text-gray-700">⚖️ Expert in Conveyancing and Litigation</p>
+          <p className="text-black">⚖️ Expert in Conveyancing and Litigation</p>
         </div>
 
         {/* Contact Info */}
