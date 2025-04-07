@@ -6,20 +6,21 @@ import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
 
 export default function LawyerEcard() {
-  const { lawyerId } = useParams();
+  // Use the same case as your dynamic route folder: [lawyerid]
+  const { lawyerid } = useParams();
   const [lawyerData, setLawyerData] = useState(null);
 
   useEffect(() => {
-    if (!lawyerId) return; // Early return if lawyerId is not yet available
+    if (!lawyerid) return; // Early return if lawyerid is not yet available
 
-    console.log("Fetching data for lawyerId:", lawyerId);  // Debugging
+    console.log("Fetching data for lawyerid:", lawyerid);
 
-    // Fetch the lawyer data dynamically using the lawyerId
+    // Fetch the lawyer data dynamically using the lawyerid
     const fetchLawyerData = async () => {
       try {
-        const response = await fetch(`/api/lawyers/${lawyerId}`);
+        const response = await fetch(`/api/lawyers/${lawyerid}`);
         const data = await response.json();
-        console.log("Fetched lawyer data:", data);  // Debugging
+        console.log("Fetched lawyer data:", data);
         setLawyerData(data);
       } catch (error) {
         console.error("Error fetching lawyer data:", error);
@@ -27,7 +28,7 @@ export default function LawyerEcard() {
     };
 
     fetchLawyerData();
-  }, [lawyerId]);
+  }, [lawyerid]);
 
   // Render loading state while data is being fetched
   if (!lawyerData) {
@@ -35,9 +36,8 @@ export default function LawyerEcard() {
   }
 
   // Dynamic link per lawyer
-  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerId}`;
+  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
 
-  // Render if the lawyerId is available and data is fetched
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
       <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl p-8 space-y-6">
@@ -55,7 +55,7 @@ export default function LawyerEcard() {
         {/* Profile Photo + Name/Title */}
         <div className="text-center space-y-2">
           <Image
-            src={lawyerData.profileImage} // Dynamic profile image
+            src={lawyerData.profileImage}
             alt={lawyerData.name}
             width={120}
             height={120}
@@ -104,8 +104,12 @@ export default function LawyerEcard() {
 
         {/* Buttons */}
         <div className="flex flex-wrap gap-3 justify-center">
-          <a href={`tel:${lawyerData.phone}`} className="px-4 py-2 bg-blue-600 text-white rounded-full">Schedule Consultation</a>
-          <a href={`mailto:${lawyerData.email}`} className="px-4 py-2 border rounded-full">Download vCard</a>
+          <a href={`tel:${lawyerData.phone}`} className="px-4 py-2 bg-blue-600 text-white rounded-full">
+            Schedule Consultation
+          </a>
+          <a href={`mailto:${lawyerData.email}`} className="px-4 py-2 border rounded-full">
+            Download vCard
+          </a>
         </div>
 
         {/* Social Links */}
@@ -123,9 +127,8 @@ export default function LawyerEcard() {
         </div>
 
         {/* Dynamic QR Code */}
-        {lawyerId && (
+        {lawyerid && (
           <div className="flex justify-center mt-6">
-            {/* Render dynamic QR Code */}
             <QRCode value={lawyerLink} size={128} />
           </div>
         )}
