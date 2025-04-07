@@ -1,26 +1,39 @@
 'use client';
 
 import Image from 'next/image';
-import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import QRCode from 'react-qr-code'; // Import the QRCode component
+import { FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { SiX } from 'react-icons/si';
+import QRCode from 'react-qr-code';
+import { useRouter } from 'next/navigation';
 
 export default function LawyerEcard() {
-  // Replace this with dynamic data in a real scenario
+  const router = useRouter();
+
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru'; // Dynamic link per lawyer
 
   return (
-    <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
+    <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4 relative">
+      <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center relative">
+
+        {/* Close Button */}
+        <button
+          aria-label="Close eCard"
+          onClick={() => router.back()} // Go back to previous page
+          className="absolute top-4 right-4 text-gray-600 hover:text-black transition"
+        >
+          <SiX className="text-2xl" />
+        </button>
+
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
-        <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
-          <Image
-            src="/images/kimaru.jpeg"
-            alt=""
-            width={140}
-            height={130}
-            className="object-cover w-full h-full"
-          />
+          <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
+            <Image
+              src="/images/kimaru.jpeg"
+              alt="Kevin Kimaru"
+              width={140}
+              height={130}
+              className="object-cover w-full h-full"
+            />
           </div>
         </div>
 
@@ -59,8 +72,8 @@ export default function LawyerEcard() {
           <a href="https://linkedin.com/in/janesmith" target="_blank" rel="noopener noreferrer">
             <FaLinkedin className="text-blue-700 text-xl" />
           </a>
-          <a href="https://twitter.com/janesmithlaw" target="_blank" rel="noopener noreferrer">
-            <FaTwitter className="text-blue-400 text-xl" />
+          <a href="https://x.com/kimarulaw" target="_blank" rel="noopener noreferrer">
+            <SiX className="text-gray-900 text-xl hover:text-blue-500 transition" />
           </a>
         </div>
 
@@ -79,7 +92,6 @@ export default function LawyerEcard() {
 
         {/* Dynamic QR Code */}
         <div className="mt-4 flex justify-center">
-          {/* Render the dynamic QR code */}
           <QRCode value={lawyerLink} size={100} />
         </div>
       </div>

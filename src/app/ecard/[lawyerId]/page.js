@@ -1,11 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
-import { FaLinkedin, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import QRCode from 'react-qr-code'; // Import the QRCode component
+import QRCode from 'react-qr-code';
+import { FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { SiX } from 'react-icons/si';
+import { IoClose } from 'react-icons/io5'; // For the close X icon
 
 export default function LawyerEcard() {
-  // Hardcoded lawyer data for now
+  const [showCard, setShowCard] = useState(true);
+
   const lawyerData = {
     name: 'Kevin Kimaru',
     title: 'Kimaru Kimutai & Co. Advocates',
@@ -24,24 +28,34 @@ export default function LawyerEcard() {
     },
   };
 
-  // Hardcoded dynamic lawyerLink
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
+
+  if (!showCard) return null;
 
   return (
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
-            {/* Profile Photo */}
-            <div className="flex justify-center mb-4">
-            <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
-              <Image
-                src="/images/kimaru.jpeg"
-                alt=""
-                width={140}
-                height={130}
-                className="object-cover w-full h-full"
-              />
-              </div>
-            </div>
+      <div className="relative w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
+        {/* Close Button */}
+        <button
+          onClick={() => setShowCard(false)}
+          className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
+          aria-label="Close card"
+        >
+          <IoClose className="text-2xl" />
+        </button>
+
+        {/* Profile Photo */}
+        <div className="flex justify-center mb-4">
+          <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
+            <Image
+              src={lawyerData.profileImage}
+              alt={`${lawyerData.name} profile`}
+              width={140}
+              height={130}
+              className="object-cover w-full h-full"
+            />
+          </div>
+        </div>
 
         {/* Name & Title */}
         <h1 className="text-3xl font-bold text-gray-900 font-playfair">{lawyerData.name}</h1>
@@ -51,8 +65,7 @@ export default function LawyerEcard() {
         <div className="mt-4">
           {lawyerData.practiceAreas?.length > 0 && (
             <p className="text-black">
-              ⚖️ Expert in{' '}
-              {lawyerData.practiceAreas.join(' and ')}
+              ⚖️ Expert in {lawyerData.practiceAreas.join(' and ')}
             </p>
           )}
         </div>
@@ -87,7 +100,7 @@ export default function LawyerEcard() {
           )}
           {lawyerData.socialLinks?.twitter && (
             <a href={lawyerData.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
-              <FaTwitter className="text-blue-400 text-xl" />
+              <SiX className="text-gray-900 text-xl hover:text-blue-500 transition" />
             </a>
           )}
         </div>
@@ -103,7 +116,9 @@ export default function LawyerEcard() {
         </div>
 
         {/* Tagline */}
-        <p className="mt-6 italic text-gray-500 font-playfair">&quot;{lawyerData.tagline}&quot;</p>
+        <p className="mt-6 italic text-gray-500 font-playfair">
+          &quot;{lawyerData.tagline}&quot;
+        </p>
 
         {/* Dynamic QR Code */}
         <div className="mt-4 flex justify-center">
