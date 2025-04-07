@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code'; // Import the QRCode component
 
 export default function LawyerEcard() {
   // Replace this with dynamic data in a real scenario
-  const lawyerLink = 'https://kimaru.netlify.app/ecard'; // Dynamic link per lawyer
+  const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru'; // Dynamic link per lawyer
 
   return (
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">

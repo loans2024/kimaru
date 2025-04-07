@@ -36,7 +36,7 @@ export default function LawyerEcard() {
   }
 
   // Dynamic link per lawyer
-  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
+  const lawyerLink = `https://kimaru.netlify.app/ecard/kimaru${lawyerid}`;
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
