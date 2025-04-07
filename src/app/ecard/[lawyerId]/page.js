@@ -6,37 +6,36 @@ import { useParams } from 'next/navigation';
 import QRCode from 'react-qr-code';
 
 export default function LawyerEcard() {
-  // Use the same case as your dynamic route folder: [lawyerid]
   const { lawyerid } = useParams();
   const [lawyerData, setLawyerData] = useState(null);
 
   useEffect(() => {
-    if (!lawyerid) return; // Early return if lawyerid is not yet available
+    if (!lawyerid) return;
 
-    console.log("Fetching data for lawyerid:", lawyerid);
-
-    // Fetch the lawyer data dynamically using the lawyerid
     const fetchLawyerData = async () => {
       try {
-        const response = await fetch(`/api/lawyers/${lawyerid}`);
-        const data = await response.json();
-        console.log("Fetched lawyer data:", data);
+        const res = await fetch(`/api/lawyers/${lawyerid}`);
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
         setLawyerData(data);
-      } catch (error) {
-        console.error("Error fetching lawyer data:", error);
+      } catch (err) {
+        console.error('Failed to fetch lawyer data:', err);
       }
     };
 
     fetchLawyerData();
   }, [lawyerid]);
 
-  // Render loading state while data is being fetched
   if (!lawyerData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-600">Loading lawyer profile…</p>
+      </div>
+    );
   }
 
-  // Dynamic link per lawyer
-  const lawyerLink = `https://kimaru.netlify.app/ecard/kimaru${lawyerid}`;
+  // Build the exact URL you want embedded in the QR code:
+  const lawyerLink = `https://kimaru.netlify.app/ecard/${lawyerid}`;
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6 sm:p-10">
@@ -44,7 +43,7 @@ export default function LawyerEcard() {
         {/* Firm Logo */}
         <div className="flex justify-center">
           <Image
-            src="/firm-logo.png"
+            src={lawyerData.firmLogoUrl || '/firm-logo.png'}
             alt="Firm Logo"
             width={120}
             height={120}
@@ -66,48 +65,70 @@ export default function LawyerEcard() {
         </div>
 
         {/* Tagline */}
-        <p className="italic text-center text-gray-700">&quot;{lawyerData.tagline}&quot;</p>
+        {lawyerData.tagline && (
+          <p className="italic text-center text-gray-700">&quot;{lawyerData.tagline}&quot;</p>
+        )}
 
         {/* Practice Areas */}
-        <div>
-          <h2 className="font-semibold mb-1">Practice Areas</h2>
-          <ul className="list-disc list-inside text-sm text-gray-700">
-            {lawyerData.practiceAreas.map((area, index) => (
-              <li key={index}>{area}</li>
-            ))}
-          </ul>
-        </div>
+        {lawyerData.practiceAreas?.length > 0 && (
+          <div>
+            <h2 className="font-semibold mb-1">Practice Areas</h2>
+            <ul className="list-disc list-inside text-sm text-gray-700">
+              {lawyerData.practiceAreas.map((area, i) => (
+                <li key={i}>{area}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Contact Info */}
         <div className="space-y-1 text-sm">
           <p><strong>Phone:</strong> {lawyerData.phone}</p>
           <p><strong>Email:</strong> {lawyerData.email}</p>
-          <p>
-            <strong>Website:</strong> 
-            <a href={lawyerData.website} className="text-blue-600 underline">
-              {lawyerData.website}
-            </a>
-          </p>
+          {lawyerData.website && (
+            <p>
+              <strong>Website:</strong>{' '}
+              <a
+                href={lawyerData.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {lawyerData.website}
+              </a>
+            </p>
+          )}
         </div>
 
-        {/* Address + Map Link */}
-        <div className="text-sm">
-          <p><strong>Office:</strong> {lawyerData.officeAddress}</p>
-          <a
-            href={lawyerData.mapLink}
-            target="_blank"
-            className="text-blue-500 underline"
-          >
-            View on Google Maps
-          </a>
-        </div>
+        {/* Office Address */}
+        {lawyerData.officeAddress && (
+          <div className="text-sm">
+            <p><strong>Office:</strong> {lawyerData.officeAddress}</p>
+            {lawyerData.mapLink && (
+              <a
+                href={lawyerData.mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                View on Google Maps
+              </a>
+            )}
+          </div>
+        )}
 
-        {/* Buttons */}
+        {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 justify-center">
-          <a href={`tel:${lawyerData.phone}`} className="px-4 py-2 bg-blue-600 text-white rounded-full">
+          <a
+            href={`tel:${lawyerData.phone}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded-full"
+          >
             Schedule Consultation
           </a>
-          <a href={`mailto:${lawyerData.email}`} className="px-4 py-2 border rounded-full">
+          <a
+            href={`mailto:${lawyerData.email}`}
+            className="px-4 py-2 border rounded-full"
+          >
             Download vCard
           </a>
         </div>
@@ -116,22 +137,27 @@ export default function LawyerEcard() {
         <div className="flex justify-center gap-4 mt-4">
           {lawyerData.socialLinks?.linkedin && (
             <a href={lawyerData.socialLinks.linkedin} target="_blank">
-              <Image src="/linkedin.png" alt="LinkedIn" width={24} height={24} />
+              <FaLinkedin className="text-blue-700 text-xl" />
             </a>
           )}
           {lawyerData.socialLinks?.twitter && (
             <a href={lawyerData.socialLinks.twitter} target="_blank">
-              <Image src="/x-icon.png" alt="Twitter" width={24} height={24} />
+              <FaTwitter className="text-blue-400 text-xl" />
             </a>
           )}
         </div>
 
         {/* Dynamic QR Code */}
-        {lawyerid && (
-          <div className="flex justify-center mt-6">
-            <QRCode value={lawyerLink} size={128} />
+        <div className="flex justify-center mt-6">
+          <div style={{ background: 'white', padding: '16px' }}>
+            <QRCode
+              value={lawyerLink}
+              size={150}
+              level="M"
+              includeMargin
+            />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
