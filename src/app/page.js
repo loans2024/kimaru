@@ -138,8 +138,8 @@ END:VCARD`;
         </div>
 
         {/* Tagline */}
-        <p className="mt-6 italic text-gray-500 font-playfair">
-          &quot;Dedication. Passion. Abilities. Knowledge.&quot;
+        <p className="mt-6 italic text-gray-400 font-playfair">
+          &quot;Dedication. Passion. Abilities. Knowledge&quot;
         </p>
 
         {/* QR Code */}
