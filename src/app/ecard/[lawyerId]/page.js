@@ -28,7 +28,7 @@ export default function LawyerEcard() {
     e.preventDefault();
     console.log('Submitting payload:', formData);
 
-    const response = await fetch('https://kelvinkimaru.onrender.com', {
+    const response = await fetch('https://kelvinkimaru.onrender.com/api/consultations/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
