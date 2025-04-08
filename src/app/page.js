@@ -21,14 +21,26 @@ export default function LawyerEcard() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-    setShowForm(false); // Close form after submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('https://formspree.io/f/mkgjpakb', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      console.log('Form submitted successfully');
+      setShowForm(false); // Close form after successful submission
+    } else {
+      console.error('Error submitting form');
+    }
   };
 
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru'; // Dynamic link per lawyer
 
-  // Function to generate and download vCard
   const downloadVCard = () => {
     const vCardData = `BEGIN:VCARD
 VERSION:3.0
@@ -45,12 +57,10 @@ END:VCARD`;
 
     const blob = new Blob([vCardData], { type: 'text/vcard' });
     const url = URL.createObjectURL(blob);
-
     const a = document.createElement('a');
     a.href = url;
     a.download = 'kevin_kimaru.vcf';
     a.click();
-
     URL.revokeObjectURL(url);
   };
 
@@ -149,41 +159,48 @@ END:VCARD`;
               <SiX className="text-2xl" />
             </button>
             <h2 className="text-xl font-semibold mb-4 text-center">Book a Consultation</h2>
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              onChange={handleChange}
-              className="w-full border rounded-md p-2 mb-3"
-            />
-            <input
-              type="text"
-              name="contact"
-              placeholder="Phone or Email"
-              onChange={handleChange}
-              className="w-full border rounded-md p-2 mb-3"
-            />
-            <input
-              type="date"
-              name="date"
-              onChange={handleChange}
-              className="w-full border rounded-md p-2 mb-3"
-            />
-            <textarea
-              name="comment"
-              placeholder="Additional Comments"
-              onChange={handleChange}
-              className="w-full border rounded-md p-2 mb-3"
-            />
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
-            >
-              Send
-            </button>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                onChange={handleChange}
+                className="w-full border rounded-md p-2 mb-3"
+                required
+              />
+              <input
+                type="text"
+                name="contact"
+                placeholder="Phone or Email"
+                onChange={handleChange}
+                className="w-full border rounded-md p-2 mb-3"
+                required
+              />
+              <input
+                type="date"
+                name="date"
+                onChange={handleChange}
+                className="w-full border rounded-md p-2 mb-3"
+                required
+              />
+              <textarea
+                name="comment"
+                placeholder="Additional Comments"
+                onChange={handleChange}
+                className="w-full border rounded-md p-2 mb-3"
+              />
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+              >
+                Send
+              </button>
+            </form>
           </div>
         </div>
       )}
     </div>
   );
 }
+
+

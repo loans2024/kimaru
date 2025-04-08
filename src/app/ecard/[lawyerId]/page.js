@@ -9,6 +9,7 @@ import { IoClose } from 'react-icons/io5';
 
 export default function LawyerEcard() {
   const [showCard, setShowCard] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const lawyerData = {
     name: 'Kevin Kimaru',
@@ -122,7 +123,10 @@ END:VCARD
 
         {/* Action Buttons */}
         <div className="mt-6 flex flex-col md:flex-row justify-center gap-4">
-          <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition w-full md:w-auto">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition w-full md:w-auto"
+          >
             📅 Schedule Consultation
           </button>
           <button
@@ -143,9 +147,58 @@ END:VCARD
           <QRCode value={lawyerLink} size={100} />
         </div>
       </div>
+
+      {/* Consultation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-2 right-2 text-gray-600 hover:text-black"
+            >
+              <IoClose size={24} />
+            </button>
+            <h2 className="text-xl font-semibold mb-4 text-center">Schedule a Consultation</h2>
+            <form
+              action="https://formspree.io/f/mkgjpakb"
+              method="POST"
+              className="space-y-4"
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+              <textarea
+                name="message"
+                placeholder="Message"
+                rows={4}
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              ></textarea>
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+              >
+                Send Request
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 
 
