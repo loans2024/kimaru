@@ -22,6 +22,9 @@ const playfairDisplay = Playfair_Display({
 export const metadata = {
   title: "Kimaru Kimutai & Co. Advocates",
   description: "Legal expertise in Conveyancing and Litigation.",
+  icons: {
+    icon: "/favicon.ico", // This is your favicon
+  },
 };
 
 export default function RootLayout({ children }) {
