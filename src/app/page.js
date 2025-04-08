@@ -23,11 +23,36 @@ export default function LawyerEcard() {
 
   const handleSubmit = () => {
     console.log('Form submitted:', formData);
-    // Here you’ll send data to backend in future
     setShowForm(false); // Close form after submission
   };
 
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru'; // Dynamic link per lawyer
+
+  // Function to generate and download vCard
+  const downloadVCard = () => {
+    const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:Kimaru;Kevin;;;
+FN:Kevin Kimaru
+ORG:Kimaru Kimutai & Co. Advocates
+TITLE:Advocate of the High Court
+TEL;TYPE=CELL:+254729128937
+EMAIL:kimarulaw@gmail.com
+ADR;TYPE=WORK:;;Lumumba Drive, next to Cider Dental Clinic;Eldoret;;Kenya
+URL:${lawyerLink}
+NOTE:Expert in Conveyancing and Litigation
+END:VCARD`;
+
+    const blob = new Blob([vCardData], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'kevin_kimaru.vcf';
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4 relative">
@@ -66,7 +91,7 @@ export default function LawyerEcard() {
           <p className="flex items-center justify-center gap-2 text-gray-700">
             <FaMapMarkerAlt />
             <a
-              href="https://maps.google.com?q=123+Legal+St,+Lawville"
+              href="https://maps.google.com?q=Lumumba+Drive+Eldoret+Kenya"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:underline"
@@ -94,7 +119,10 @@ export default function LawyerEcard() {
           >
             📅 Schedule Consultation
           </button>
-          <button className="border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 transition w-full md:w-auto">
+          <button
+            onClick={downloadVCard}
+            className="border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 transition w-full md:w-auto"
+          >
             📄 Download vCard
           </button>
         </div>
@@ -159,4 +187,3 @@ export default function LawyerEcard() {
     </div>
   );
 }
-

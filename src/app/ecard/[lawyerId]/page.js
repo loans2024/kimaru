@@ -5,7 +5,7 @@ import Image from 'next/image';
 import QRCode from 'react-qr-code';
 import { FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import { SiX } from 'react-icons/si';
-import { IoClose } from 'react-icons/io5'; // For the close X icon
+import { IoClose } from 'react-icons/io5';
 
 export default function LawyerEcard() {
   const [showCard, setShowCard] = useState(true);
@@ -30,21 +30,35 @@ export default function LawyerEcard() {
 
   const lawyerLink = 'https://kimaru.netlify.app/ecard/kimaru';
 
+  const downloadVCard = () => {
+    const vCardData = `
+BEGIN:VCARD
+VERSION:3.0
+FN:${lawyerData.name}
+ORG:${lawyerData.title}
+TEL;TYPE=WORK,VOICE:${lawyerData.phone}
+EMAIL:${lawyerData.email}
+URL:${lawyerData.website}
+ADR;TYPE=WORK:;;${lawyerData.officeAddress}
+END:VCARD
+`.trim();
+
+    const blob = new Blob([vCardData], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${lawyerData.name.replace(/\s+/g, '_')}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (!showCard) return null;
 
   return (
     <div className="min-h-screen bg-black lg:bg-white flex flex-col items-center justify-center p-4">
       <div className="relative w-full max-w-2xl bg-stone-100 rounded-2xl shadow-xl p-6 text-center">
-        {/* Close Button 
-        <button
-          onClick={() => setShowCard(false)}
-          className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition"
-          aria-label="Close card"
-        >
-          <IoClose className="text-2xl" />
-        </button>
-        */}
-
         {/* Profile Photo */}
         <div className="flex justify-center mb-4">
           <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
@@ -111,7 +125,10 @@ export default function LawyerEcard() {
           <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition w-full md:w-auto">
             📅 Schedule Consultation
           </button>
-          <button className="border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 transition w-full md:w-auto">
+          <button
+            onClick={downloadVCard}
+            className="border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 transition w-full md:w-auto"
+          >
             📄 Download vCard
           </button>
         </div>
@@ -121,7 +138,7 @@ export default function LawyerEcard() {
           &quot;{lawyerData.tagline}&quot;
         </p>
 
-        {/* Dynamic QR Code */}
+        {/* QR Code */}
         <div className="mt-4 flex justify-center">
           <QRCode value={lawyerLink} size={100} />
         </div>
@@ -129,5 +146,6 @@ export default function LawyerEcard() {
     </div>
   );
 }
+
 
 
