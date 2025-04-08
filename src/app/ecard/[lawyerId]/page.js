@@ -11,16 +11,46 @@ export default function LawyerEcard() {
   const [showCard, setShowCard] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
+  // Form state includes exactly the fields your backend expects
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    email: '',
+    date: '',
+    comment: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Submitting payload:', formData);
+
+    const response = await fetch('https://kelvinkimaru.onrender.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      console.log('Form submitted successfully');
+      setShowModal(false);
+    } else {
+      const errText = await response.text();
+      console.error('Error submitting form:', response.status, errText);
+    }
+  };
+
   const lawyerData = {
     name: 'Kevin Kimaru',
     title: 'Kimaru Kimutai & Co. Advocates',
     profileImage: '/images/kimaru.jpeg',
-    firmLogoUrl: '/firm-logo.png',
     tagline: 'Dedication. Passion. Abilities. Knowledge.',
     practiceAreas: ['Conveyancing', 'Litigation'],
     phone: '+254729128937',
-    email: 'kimarulaw@gmail.com',
-    website: 'https://kimaru.netlify.app',
+    email: 'Kimarukevin770@gmail.com',
     officeAddress: 'Lumumba Drive next to Cider Dental Clinic Eldoret, Kenya',
     mapLink: 'https://maps.google.com?q=Lumumba+Drive+Eldoret+Kenya',
     socialLinks: {
@@ -39,19 +69,18 @@ FN:${lawyerData.name}
 ORG:${lawyerData.title}
 TEL;TYPE=WORK,VOICE:${lawyerData.phone}
 EMAIL:${lawyerData.email}
-URL:${lawyerData.website}
 ADR;TYPE=WORK:;;${lawyerData.officeAddress}
+URL:${lawyerLink}
+NOTE:Expert in ${lawyerData.practiceAreas.join(' and ')}
 END:VCARD
 `.trim();
 
     const blob = new Blob([vCardData], { type: 'text/vcard' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${lawyerData.name.replace(/\s+/g, '_')}.vcf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${lawyerData.name.replace(/\s+/g, '_')}.vcf`;
+    a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -65,7 +94,7 @@ END:VCARD
           <div className="w-[270px] h-[170px] bg-white rounded-lg overflow-hidden shadow-md">
             <Image
               src={lawyerData.profileImage}
-              alt={`${lawyerData.name} profile`}
+              alt={lawyerData.name}
               width={140}
               height={130}
               className="object-cover w-full h-full"
@@ -79,11 +108,7 @@ END:VCARD
 
         {/* Practice Areas */}
         <div className="mt-4">
-          {lawyerData.practiceAreas?.length > 0 && (
-            <p className="text-black">
-              ⚖️ Expert in {lawyerData.practiceAreas.join(' and ')}
-            </p>
-          )}
+          <p className="text-black">⚖️ Expert in {lawyerData.practiceAreas.join(' and ')}</p>
         </div>
 
         {/* Contact Info */}
@@ -109,16 +134,12 @@ END:VCARD
 
         {/* Social Links */}
         <div className="flex justify-center gap-4 mt-4">
-          {lawyerData.socialLinks?.linkedin && (
-            <a href={lawyerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
-              <FaLinkedin className="text-blue-700 text-xl" />
-            </a>
-          )}
-          {lawyerData.socialLinks?.twitter && (
-            <a href={lawyerData.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
-              <SiX className="text-gray-900 text-xl hover:text-blue-500 transition" />
-            </a>
-          )}
+          <a href={lawyerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">
+            <FaLinkedin className="text-blue-700 text-xl" />
+          </a>
+          <a href={lawyerData.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
+            <SiX className="text-gray-900 text-xl hover:text-blue-500 transition" />
+          </a>
         </div>
 
         {/* Action Buttons */}
@@ -138,7 +159,7 @@ END:VCARD
         </div>
 
         {/* Tagline */}
-        <p className="mt-6 italic text-gray-500 font-playfair">
+        <p className="mt-6 italic text-gray-400 font-playfair">
           &quot;{lawyerData.tagline}&quot;
         </p>
 
@@ -150,8 +171,8 @@ END:VCARD
 
       {/* Consultation Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[90%] max-w-md relative">
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-2 right-2 text-gray-600 hover:text-black"
@@ -159,37 +180,54 @@ END:VCARD
               <IoClose size={24} />
             </button>
             <h2 className="text-xl font-semibold mb-4 text-center">Schedule a Consultation</h2>
-            <form
-              action="https://formspree.io/f/mkgjpakb"
-              method="POST"
-              className="space-y-4"
-            >
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
                 name="name"
                 placeholder="Your Name"
-                required
+                onChange={handleChange}
+                value={formData.name}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+              <input
+                type="text"
+                name="contact"
+                placeholder="Phone or Email"
+                onChange={handleChange}
+                value={formData.contact}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
               />
               <input
                 type="email"
                 name="email"
                 placeholder="Your Email"
-                required
+                onChange={handleChange}
+                value={formData.email}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+              <input
+                type="date"
+                name="date"
+                onChange={handleChange}
+                value={formData.date}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
               />
               <textarea
-                name="message"
-                placeholder="Message"
-                rows={4}
-                required
+                name="comment"
+                placeholder="Additional Comments"
+                onChange={handleChange}
+                value={formData.comment}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
-              ></textarea>
+              />
               <button
                 type="submit"
                 className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
               >
-                Send Request
+                Send
               </button>
             </form>
           </div>
@@ -198,7 +236,6 @@ END:VCARD
     </div>
   );
 }
-
 
 
 
